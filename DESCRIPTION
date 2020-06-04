@@ -1,0 +1,22 @@
+Package: AQVisR
+Version: 0.0.1
+Date: 2020-06-03
+Title: AQVisR
+Description: A Collection of Functions Focused on Visualising Air Quality Network Data
+Author: Will S Drysdale
+Maintainer: Will S Drysdale <willdrysdale@googlemail.com>
+URL: https://github.com/willdrysdale/AQVisR
+Encoding: UTF-8
+Imports:
+    openair,
+    dplyr,
+    lubridate,
+    ggplot2,
+    tidyr,
+    purrr,
+    latex2exp,
+    stringr,
+    rlang,
+	viridisLite
+Suggests:
+    furrr
