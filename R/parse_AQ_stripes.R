@@ -31,7 +31,7 @@ parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
   }
   
   df_conc = df %>% 
-    mutate(date = date(date)) %>% 
+    mutate(date = lubridate::date(date)) %>% 
     dplyr::select(date,name,value) %>% 
     group_by(date,name) %>% 
     summarise_all(median,na.rm = T) %>% 

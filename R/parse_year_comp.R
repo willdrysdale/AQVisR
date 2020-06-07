@@ -19,7 +19,8 @@ parse_year_comp = function(df,
                            species = c("no2","pm25","o3"),
                            rolling_width = 15,
                            grp = NULL,
-                           by_code = F){
+                           by_code = F,
+                           city = NULL){
   
   if(by_code == T & "code" %in% names(df)){
     df = df %>% 
