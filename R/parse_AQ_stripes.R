@@ -17,7 +17,7 @@
 
 parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
   
-  if(preseve_code){
+  if(preserve_code){
     if("code" %in% names(df)){
       
       code = unique(df$code)
@@ -40,7 +40,7 @@ parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
            y = year(date))
   
   if(type == "conc"){
-    if(preseve_code){
+    if(preserve_code){
       df_conc$code = pcode
     }
     
@@ -60,7 +60,7 @@ parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
     mutate(diff = value.conc-value.ref) %>% 
     dplyr::select(-starts_with("value"))
   
-  if(preseve_code)
+  if(preserve_code)
     df_diff$code = pcode
   
   return(df_diff)

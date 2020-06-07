@@ -21,7 +21,7 @@ parse_AQ_stripes_sitegrid = function(siteList,type = c("conc","diff")[1],year = 
     map_df(~.x %>% 
              mutate_if(is.factor,as.character) %>% 
              mutate(code = ifelse("DERR" %in% code, "DERY",code)) %>% # fix Derry AQ sites
-             parse_AQ_stripes(preseve_code = T,type = type)) %>% 
+             parse_AQ_stripes(preserve_code = T,type = type)) %>% 
     filter(y == year)
   
   yearDat
