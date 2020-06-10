@@ -5,15 +5,14 @@
 #' @export
 
 
-AQvis_plotTheme = function(aspect.ratio = NULL){
+AQvis_plotTheme = function(){
   theme(strip.background = element_blank(),
         strip.text = element_text(size = 10),
         strip.placement = "outside",
         plot.title = element_text(size = 20,hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5),
-        aspect.ratio = aspect.ratio,
         legend.position = "bottom",
-        axis.text = element_text(size = 15,face = "bold",colour = "black"),
+        axis.text = element_text(size = 15,colour = "black"),
         axis.title = element_text(size = 15),
         plot.background = element_rect(fill = "white",
                                        colour = "white"),
