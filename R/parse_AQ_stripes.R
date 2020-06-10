@@ -37,7 +37,9 @@ parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
     summarise_all(median,na.rm = T) %>% 
     ungroup() %>% 
     mutate(yday = yday(date),
-           y = year(date))
+           y = year(date),
+           date = paste0(date," 00:00") %>% 
+             lubridate::ymd_hm())
   
   if(type == "conc"){
     if(preserve_code){
@@ -51,7 +53,7 @@ parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
   df_ref = df %>% 
     filter(year(date) %in% year(min(date,na.rm = T)):(year(max(date,na.rm = T))-1)) %>% 
     mutate(yday = yday(date)) %>% 
-    dplyr::select(date,yday,name,value) %>% 
+    dplyr::select(yday,name,value) %>% 
     group_by(yday,name) %>% 
     summarise_all(median,na.rm = T) %>% 
     ungroup()
