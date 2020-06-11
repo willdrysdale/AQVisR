@@ -4,12 +4,12 @@
 \alias{get_aurn}
 \title{get_aurn}
 \usage{
-get_aurn(keyword, site_type = NULL, meta = NULL, ...)
+get_aurn(keyword = NULL, site.type = NULL, meta = NULL, ...)
 }
 \arguments{
 \item{keyword}{Optional keyword matched to site name using \code{stringr::str_detect()}}
 
-\item{site_type}{One, or a vector of: "Urban Background", "Urban Traffic", "Rural Background", "Suburban Background", "Urban Industrial", "Suburban Industrial". NULL imports all site types}
+\item{site.type}{One, or a vector of: "Urban Background", "Urban Traffic", "Rural Background", "Suburban Background", "Urban Industrial", "Suburban Industrial". NULL imports all site types}
 
 \item{meta}{Optionally supply the site meta data. When NULL this is automatically downloaded via \code{openair::importMeta(source = "aurn")}}
 
