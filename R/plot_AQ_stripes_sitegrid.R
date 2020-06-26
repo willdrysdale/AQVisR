@@ -22,7 +22,7 @@ plot_AQ_stripes_sitegrid = function(stripeDat,spc = "no2",yday_thresh = (yday(Sy
     plotDat = stripeDat %>% 
       filter(name == spc,
              yday <= yday_thresh) %>% 
-      select(code,yday,diff) %>% 
+      dplyr::select(code,yday,diff) %>% 
       group_by(code)
     
     
@@ -45,7 +45,7 @@ plot_AQ_stripes_sitegrid = function(stripeDat,spc = "no2",yday_thresh = (yday(Sy
     plotDat = stripeDat %>% 
       filter(name == spc,
              yday <= yday_thresh) %>% 
-      select(code,yday,value) %>% 
+      dplyr::select(code,yday,value) %>% 
       group_by(code)
     
     

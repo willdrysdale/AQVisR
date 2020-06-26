@@ -13,6 +13,8 @@
 
 parse_spec = function(df,name = name,unit = TRUE,TeX = TRUE){
   
+  require(latex2exp)
+  
   name = enquo(name)
   
   df = df %>% 
