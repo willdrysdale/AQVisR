@@ -5,7 +5,8 @@
 \title{Plot week bar}
 \usage{
 plot_week_bar(df, current = "2020", previous = "2015 - 2019",
-  by_code = T)
+  by_code = T, vline_pos = NULL, xlim = c(0, 52), na.rm = F,
+  type = c("difference", "percent")[1], combine_spc = F)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}
@@ -15,6 +16,15 @@ plot_week_bar(df, current = "2020", previous = "2015 - 2019",
 \item{previous}{name of group in column "y" to subtract from current, default "2015 - 2019"}
 
 \item{by_code}{logical, should the analysis be grouped by the code column}
+
+\item{vline_pos}{numeric vector to place vertical lines}
+
+\item{na.rm}{logical, should the data be filtered by \code{filter(!is.na(value))}}
+
+\item{type}{one of "difference" or "percent". When difference (default),
+change is current-previous. When percent, change is ((current-previous)/previous)*100}
+
+\item{combine_spc}{logical, should species be used in facet wrapping}
 }
 \description{
 Plots the output of \code{parse_year_comp()} as a bar chart of the difference of two periods
