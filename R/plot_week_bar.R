@@ -11,6 +11,8 @@
 #' @param type one of "difference" or "percent". When difference (default),
 #' change is current-previous. When percent, change is ((current-previous)/previous)*100
 #' @param combine_spc logical, should species be used in facet wrapping
+#' @param highlight_range numerical vector length 2. range of values to highlight.
+#' bars that fall outside of this range have their alpha reduced. default equal to xlim
 #' 
 #' @author W. S. Drysdale
 #' 
@@ -25,7 +27,8 @@ plot_week_bar = function(df,
                          xlim = c(0,52),
                          na.rm = F,
                          type = c("difference","percent")[1],
-                         combine_spc = F){
+                         combine_spc = F,
+                         highlight_range = xlim){
   
   if(!"code" %in% names(df))
     by_code = F
@@ -65,6 +68,15 @@ plot_week_bar = function(df,
     
   }
   
+  df_week_diff = df_week_diff %>% 
+    mutate(highlight = ifelse(between(w,min(highlight_range),max(highlight_range)),T,F))
+  
+  if(sum(highlight_range == xlim) == 2){
+    a = c(1,1)
+  }else{
+    a = c(0.5,1)
+  }
+  
   if(na.rm){
     df_week_diff = df_week_diff %>% 
       filter(!is.na(value))
@@ -79,9 +91,10 @@ plot_week_bar = function(df,
   
   g = df_week_diff %>% 
     ggplot()+
-    geom_bar(aes(w,plot_value,fill = name_parsed),stat = "identity")+
+    geom_bar(aes(w,plot_value,fill = name_parsed,alpha = highlight),stat = "identity")+
     scale_fill_brewer(palette = "Set1",labels = function(x) parse(text = x), name = "")+
     scale_x_continuous(limits = xlim,name = "Week of Year")+
+    scale_alpha_manual(values = a,guide = F)+
     ylab(ifelse(type == "difference","Absolute Concentration Difference", "Perecentage Concentration Difference"))+
     AQvis_plotTheme()
   

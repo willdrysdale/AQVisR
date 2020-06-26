@@ -6,7 +6,8 @@
 \usage{
 plot_week_bar(df, current = "2020", previous = "2015 - 2019",
   by_code = T, vline_pos = NULL, xlim = c(0, 52), na.rm = F,
-  type = c("difference", "percent")[1], combine_spc = F)
+  type = c("difference", "percent")[1], combine_spc = F,
+  highlight_range = xlim)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}
@@ -25,6 +26,9 @@ plot_week_bar(df, current = "2020", previous = "2015 - 2019",
 change is current-previous. When percent, change is ((current-previous)/previous)*100}
 
 \item{combine_spc}{logical, should species be used in facet wrapping}
+
+\item{highlight_range}{numerical vector length 2. range of values to highlight.
+bars that fall outside of this range have their alpha reduced. default equal to xlim}
 }
 \description{
 Plots the output of \code{parse_year_comp()} as a bar chart of the difference of two periods
