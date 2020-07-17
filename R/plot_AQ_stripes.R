@@ -14,6 +14,9 @@
 
 plot_AQ_stripes = function(df, spc = "no2",vline_pos = NULL,title = NULL){
   
+  require(ggplot2)
+  require(lubridate)
+  
   spc_df = data.frame(name = spc,stringsAsFactors = F) %>% 
     parse_spec(TeX = T)
   

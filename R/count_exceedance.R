@@ -82,15 +82,16 @@ count_exceedance = function(df,
     
     dfCountDaysOnly = df %>% 
       mutate(y = year(date),
-             m = month(date)) %>% 
+             m = month(date),
+             date = lubridate::date(date)) %>% 
       filter(!is.na(exceed),
              period_h %in% period,
              name %in% exceedance_days_only,
              exceed) %>% 
-      group_by(date(date),code,name,y,m) %>% 
+      group_by(date,code,name,y,m) %>% 
       count(name = "daily_n_exceed") %>% 
       ungroup() %>% 
-      dplyr::select(-`date(date)`) %>% 
+      dplyr::select(-date) %>% 
       mutate(daily_n_exceed = ifelse(daily_n_exceed == 0,0,1)) %>% 
       group_by(code,name,y,m) %>% 
       count(name = "n_exceed") %>% 

@@ -18,7 +18,7 @@ get_aurn = function(keyword = NULL,site.type = NULL, meta = NULL,...){
   }
   
   if(!is.null(keyword)){
-    meta = meta[stringr::str_detect(meta$site,paste0("(",cities,")",collapse = "|")),]
+    meta = meta[stringr::str_detect(meta$site,paste0("(",keyword,")",collapse = "|")),]
   }
   
   if(!is.null(site.type)){

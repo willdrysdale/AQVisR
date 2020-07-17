@@ -38,37 +38,37 @@ parse_year_comp = function(df,
   }
   
   df = df %>% 
-    filter(year(date) <= comp_year) # remove data following comp_year to simplify averaging
+    filter(lubridate::year(date) <= comp_year) # remove data following comp_year to simplify averaging
   
   # Include data from previous year at the begining of the time series to allow rolling median to run into the begining of the comparison year
   df_pre = df %>% 
     dplyr::filter(name %in% species,
-                  year(date) == comp_year-1,
-                  month(date) %in% 6:12) %>% 
-    dplyr::mutate(y = year(date),
-                  yd = (yday(date)-365),
+                  lubridate::year(date) == comp_year-1,
+                  lubridate::month(date) %in% 6:12) %>% 
+    dplyr::mutate(y = lubridate::year(date),
+                  yd = (lubridate::yday(date)-365),
                   y = as.character(comp_year)) %>% 
     dplyr::select(y,yd,name,value) %>% 
-    group_by(y,yd,name) %>% 
-    summarise_all(median,na.rm = T) %>% 
-    group_by(name,y) %>% 
+    dplyr::group_by(y,yd,name) %>% 
+    dplyr::summarise_all(median,na.rm = T) %>% 
+    dplyr::group_by(name,y) %>% 
     dplyr::mutate(value_median = zoo::rollmedian(value,k = rolling_width,fill = NA)) %>% 
-    ungroup() %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(rolling_width = rolling_width)
   
   df = df %>% 
     dplyr::filter(name %in% species) %>% 
-    dplyr::mutate(y = year(date),
-                  yd = yday(date),
-                  y = case_when(y == comp_year ~ as.character(comp_year),
+    dplyr::mutate(y = lubridate::year(date),
+                  yd = lubridate::yday(date),
+                  y = dplyr::case_when(y == comp_year ~ as.character(comp_year),
                                 min(y,na.rm = T) == (max(y,na.rm = T)-1) ~ as.character(min(y,na.rm = T)),
                                 TRUE ~ paste0(min(y,na.rm = T)," - ",(max(y,na.rm = T)-1)))) %>% 
     dplyr::select(y,yd,name,value) %>% 
-    group_by(y,yd,name) %>% 
-    summarise_all(median,na.rm = T) %>% 
-    group_by(name,y) %>% 
+    dplyr::group_by(y,yd,name) %>% 
+    dplyr::summarise_all(median,na.rm = T) %>% 
+    dplyr::group_by(name,y) %>% 
     dplyr::mutate(value_median = zoo::rollmedian(value,k = rolling_width,fill = NA)) %>% 
-    ungroup() %>% 
+    dplyr::ungroup() %>% 
     dplyr::mutate(rolling_width = rolling_width) %>% 
     rbind(df_pre) %>% 
     arrange(yd)

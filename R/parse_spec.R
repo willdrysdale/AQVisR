@@ -23,29 +23,29 @@ parse_spec = function(df,name = name,unit = TRUE,TeX = TRUE){
   if(TeX){
     if(unit){
       df %>% 
-        dplyr::mutate(name_parsed = case_when(!!name == "o3" ~ paste0(TeX("O_{3} / $\\mu$g m^{-3}")),
-                                              !!name == "no" ~ paste0(TeX("NO / $\\mu$g m^{-3}")),
-                                              !!name == "no2" ~ paste0(TeX("NO_{2} / $\\mu$g m^{-3}")),
-                                              !!name == "nox" ~ paste0(TeX("NO_{x} / $\\mu$g m^{-3}")),
-                                              !!name ==  "pm25" ~ paste0(TeX("PM_{2\\\\PERIOD@5} / $\\mu$g m^{-3}")),
-                                              !!name == "pm10" ~ paste0(TeX("PM_{10} / $\\mu$g m^{-3}")),
-                                              !!name == "so2" ~ paste0(TeX("SO_{2} / $\\mu$g m^{-3}")),
-                                              !!name == "co" ~ paste0(TeX("CO / mg m^{-3}")),
-                                              !!name == "ws" ~ paste0(TeX("Wind Speed / m s^{-1}")),
-                                              !!name == "wd" ~ paste0(TeX("Wind Direction / \u00B0")),
+        dplyr::mutate(name_parsed = case_when(!!name == "o3" ~ paste0(latex2exp::TeX("O_{3} / $\\mu$g m^{-3}")),
+                                              !!name == "no" ~ paste0(latex2exp::TeX("NO / $\\mu$g m^{-3}")),
+                                              !!name == "no2" ~ paste0(latex2exp::TeX("NO_{2} / $\\mu$g m^{-3}")),
+                                              !!name == "nox" ~ paste0(latex2exp::TeX("NO_{x} / $\\mu$g m^{-3}")),
+                                              !!name ==  "pm25" ~ paste0(latex2exp::TeX("PM_{2\\\\PERIOD@5} / $\\mu$g m^{-3}")),
+                                              !!name == "pm10" ~ paste0(latex2exp::TeX("PM_{10} / $\\mu$g m^{-3}")),
+                                              !!name == "so2" ~ paste0(latex2exp::TeX("SO_{2} / $\\mu$g m^{-3}")),
+                                              !!name == "co" ~ paste0(latex2exp::TeX("CO / mg m^{-3}")),
+                                              !!name == "ws" ~ paste0(latex2exp::TeX("Wind Speed / m s^{-1}")),
+                                              !!name == "wd" ~ paste0(latex2exp::TeX("Wind Direction / \u00B0")),
                                               TRUE ~ !!name))
     }else{
       df %>% 
-        dplyr::mutate(name_parsed = case_when(!!name == "o3" ~ paste0(TeX("O_{3}")),
-                                              !!name == "no" ~ paste0(TeX("NO")),
-                                              !!name == "no2" ~ paste0(TeX("NO_{2}")),
-                                              !!name == "nox" ~ paste0(TeX("NO_{x}")),
-                                              !!name == "pm25" ~ paste0(TeX("PM_{2\\\\PERIOD@5}")),
-                                              !!name == "pm10" ~ paste0(TeX("PM_{10}")),
-                                              !!name == "so2" ~ paste0(TeX("SO_{2}")),
-                                              !!name == "co" ~ paste0(TeX("CO")),
-                                              !!name == "ws" ~ paste0(TeX("Wind Speed")),
-                                              !!name == "wd" ~ paste0(TeX("Wind Direction")),
+        dplyr::mutate(name_parsed = case_when(!!name == "o3" ~ paste0(latex2exp::TeX("O_{3}")),
+                                              !!name == "no" ~ paste0(latex2exp::TeX("NO")),
+                                              !!name == "no2" ~ paste0(latex2exp::TeX("NO_{2}")),
+                                              !!name == "nox" ~ paste0(latex2exp::TeX("NO_{x}")),
+                                              !!name == "pm25" ~ paste0(latex2exp::TeX("PM_{2\\\\PERIOD@5}")),
+                                              !!name == "pm10" ~ paste0(latex2exp::TeX("PM_{10}")),
+                                              !!name == "so2" ~ paste0(latex2exp::TeX("SO_{2}")),
+                                              !!name == "co" ~ paste0(latex2exp::TeX("CO")),
+                                              !!name == "ws" ~ paste0(latex2exp::TeX("Wind Speed")),
+                                              !!name == "wd" ~ paste0(latex2exp::TeX("Wind Direction")),
                                               TRUE ~ !!name))
     }
   }else{
