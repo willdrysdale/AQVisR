@@ -10,9 +10,9 @@
 #' @param na.rm logical, should the data be filtered by \code{filter(!is.na(value))}
 #' @param type one of "difference", "percent" or "absolute".
 #'        \itemize{
-#'            \item difference - change is current-previous
-#'            \item percent - change is ((current-previous)/previous)*100
-#'            \item absolute - plot absolute values from current period only
+#'            \item {difference - change is current-previous}
+#'            \item {percent - change is ((current-previous)/previous)*100}
+#'            \item {absolute - plot absolute values from current period only}
 #'        }
 #' @param combine_spc logical, should species be used in facet wrapping
 #' @param highlight_range numerical vector length 2. range of values to highlight.
