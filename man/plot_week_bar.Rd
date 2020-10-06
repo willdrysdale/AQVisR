@@ -31,10 +31,11 @@ plot_week_bar(
 \item{na.rm}{logical, should the data be filtered by \code{filter(!is.na(value))}}
 
 \item{type}{one of "difference", "percent" or "absolute".
-\itemize
-\item difference - change is current-previous
-\item percent - change is ((current-previous)/previous)*100
-\item absolute - plot absolute values from current period only}
+\itemize{
+    \item difference - change is current-previous
+    \item percent - change is ((current-previous)/previous)*100
+    \item absolute - plot absolute values from current period only
+}}
 
 \item{combine_spc}{logical, should species be used in facet wrapping}
 
