@@ -32,13 +32,7 @@ get_aurn = function(keyword = NULL,site.type = NULL, meta = NULL,...){
   if(is.null(dat))
     return(NULL)
   
-  names(dat) = names(dat) %>% 
-    stringr::str_remove_all("\\.") %>% 
-    tolower()
-  
   # Return
-  dat %>% 
-    dplyr::select(-site) %>% 
-    tidyr::pivot_longer(-c(date,code)) %>% 
-    mutate_if(is.factor,as.character)
+  tidy_aurn(dat)
+
 }
