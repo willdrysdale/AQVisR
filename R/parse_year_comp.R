@@ -25,14 +25,13 @@ parse_year_comp = function(df,
   if(by_code == T & "code" %in% names(df)){
     df = df %>% 
       tidyr::nest(data = c(date,name,value)) %>% 
-      purrr::pmap_df(~parse_year_comp(df = ..2,
-                                     comp_year = comp_year,
-                                     species = species,
-                                     rolling_width = rolling_width,
-                                     grp = grp,
-                                     by_code = F) %>% 
-                      mutate(code = ..1)
-                    )
+      mutate(data = map(data, ~parse_year_comp(df = .x,
+                                               comp_year = comp_year,
+                                               species = species,
+                                               rolling_width = rolling_width,
+                                               grp = grp,
+                                               by_code = F))) %>% 
+      tidyr::unnest(data)
     
     return(df)
   }
