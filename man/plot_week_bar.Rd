@@ -4,10 +4,18 @@
 \alias{plot_week_bar}
 \title{Plot week bar}
 \usage{
-plot_week_bar(df, current = "2020", previous = "2015 - 2019",
-  by_code = T, vline_pos = NULL, xlim = c(0, 52), na.rm = F,
-  type = c("difference", "percent")[1], combine_spc = F,
-  highlight_range = xlim)
+plot_week_bar(
+  df,
+  current = "2020",
+  previous = "2015 - 2019",
+  by_code = T,
+  vline_pos = NULL,
+  xlim = c(0, 52),
+  na.rm = F,
+  type = c("difference", "percent", "absolute")[1],
+  combine_spc = F,
+  highlight_range = xlim
+)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}
@@ -22,8 +30,11 @@ plot_week_bar(df, current = "2020", previous = "2015 - 2019",
 
 \item{na.rm}{logical, should the data be filtered by \code{filter(!is.na(value))}}
 
-\item{type}{one of "difference" or "percent". When difference (default),
-change is current-previous. When percent, change is ((current-previous)/previous)*100}
+\item{type}{one of "difference", "percent" or "absolute".
+\itemize
+\item difference - change is current-previous
+\item percent - change is ((current-previous)/previous)*100
+\item absolute - plot absolute values from current period only}
 
 \item{combine_spc}{logical, should species be used in facet wrapping}
 

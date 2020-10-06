@@ -8,8 +8,11 @@
 #' @param by_code logical, should the analysis be grouped by the code column
 #' @param vline_pos numeric vector to place vertical lines
 #' @param na.rm logical, should the data be filtered by \code{filter(!is.na(value))}
-#' @param type one of "difference" or "percent". When difference (default),
-#' change is current-previous. When percent, change is ((current-previous)/previous)*100
+#' @param type one of "difference", "percent" or "absolute".
+#'        \itemize
+#'        \item difference - change is current-previous
+#'        \item percent - change is ((current-previous)/previous)*100
+#'        \item absolute - plot absolute values from current period only
 #' @param combine_spc logical, should species be used in facet wrapping
 #' @param highlight_range numerical vector length 2. range of values to highlight.
 #' bars that fall outside of this range have their alpha reduced. default equal to xlim
@@ -26,7 +29,7 @@ plot_week_bar = function(df,
                          vline_pos = NULL,
                          xlim = c(0,52),
                          na.rm = F,
-                         type = c("difference","percent")[1],
+                         type = c("difference","percent","absolute")[1],
                          combine_spc = F,
                          highlight_range = xlim){
   
@@ -82,12 +85,14 @@ plot_week_bar = function(df,
       filter(!is.na(value))
   }
   
-  if(type == "difference"){
+  if(type == "difference")
     df_week_diff$plot_value = df_week_diff$value
-  }else{
+  
+  if(type == "percent")
     df_week_diff$plot_value = df_week_diff$value_percent
-  }
-    
+  
+  if(type == "absolute")
+    df_week_diff$plot_value = df_week_diff$value.current
   
   g = df_week_diff %>% 
     ggplot()+
@@ -95,7 +100,9 @@ plot_week_bar = function(df,
     scale_fill_brewer(palette = "Set1",labels = function(x) parse(text = x), name = "")+
     scale_x_continuous(limits = xlim,name = "Week of Year")+
     scale_alpha_manual(values = a,guide = F)+
-    ylab(ifelse(type == "difference","Absolute Concentration Difference", "Perecentage Concentration Difference"))+
+    ylab(case_when(type == "difference" ~ "Absolute Concentration Difference",
+                   type == "percent" ~ "Perecentage Concentration Difference",
+                   type == "absolute" ~ "Absolute Concentration"))+
     AQvis_plotTheme()
   
   if(combine_spc){
