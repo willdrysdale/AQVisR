@@ -4,8 +4,12 @@
 \alias{plot_AQ_stripes_sitegrid}
 \title{plot_AQ_stripes_sitegrid}
 \usage{
-plot_AQ_stripes_sitegrid(stripeDat, spc = "no2",
-  yday_thresh = (yday(Sys.time()) - 1), normalise = F)
+plot_AQ_stripes_sitegrid(
+  stripeDat,
+  spc = "no2",
+  yday_thresh = (yday(Sys.time()) - 1),
+  normalise = F
+)
 }
 \arguments{
 \item{stripeDat}{output of \code{parse_AQ_stripes_grid()}}

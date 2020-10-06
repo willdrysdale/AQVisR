@@ -4,9 +4,12 @@
 \alias{summariseSitesByDateRange}
 \title{summariseSitesByDateRange}
 \usage{
-summariseSitesByDateRange(df,
+summariseSitesByDateRange(
+  df,
   date_start = lubridate::ymd_hm("2020-01-01 00:00"),
-  date_end = lubridate::ymd_hm("2020-01-31 00:00"), by_code = F)
+  date_end = lubridate::ymd_hm("2020-01-31 00:00"),
+  by_code = F
+)
 }
 \arguments{
 \item{df}{data frame containing date, value/diff and optionally code}

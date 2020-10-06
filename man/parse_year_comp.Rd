@@ -4,8 +4,15 @@
 \alias{parse_year_comp}
 \title{parse_year_comp}
 \usage{
-parse_year_comp(df, comp_year = 2020, species = c("no2", "pm25", "o3"),
-  rolling_width = 15, grp = NULL, by_code = F, city = NULL)
+parse_year_comp(
+  df,
+  comp_year = 2020,
+  species = c("no2", "pm25", "o3"),
+  rolling_width = 15,
+  grp = NULL,
+  by_code = F,
+  city = NULL
+)
 }
 \arguments{
 \item{df}{data.frame of site data}

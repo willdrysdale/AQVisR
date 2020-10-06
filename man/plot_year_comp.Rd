@@ -4,9 +4,16 @@
 \alias{plot_year_comp}
 \title{plot_year_comp}
 \usage{
-plot_year_comp(df, type = c("median", "smooth", "smoothmedian")[1],
-  xlim = c(0, 365), vline_pos = NULL, xlab = "Day of Year",
-  strip_text_y = NULL, annotations = TRUE, ...)
+plot_year_comp(
+  df,
+  type = c("median", "smooth", "smoothmedian")[1],
+  xlim = c(0, 365),
+  vline_pos = NULL,
+  xlab = "Day of Year",
+  strip_text_y = NULL,
+  annotations = TRUE,
+  ...
+)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}
