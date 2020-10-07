@@ -35,7 +35,7 @@ plot_month_bar = function(df,
                          highlight_range = xlim){
 
   month_number <- function(doy = 1) {
-    as.Date(doy, origin = "2015-12-31") %>%
+    as.Date(doy, origin = "2016-12-31") %>%
       lubridate::month()
   }
   
