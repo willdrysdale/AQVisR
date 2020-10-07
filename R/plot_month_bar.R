@@ -18,7 +18,7 @@
 #' @param highlight_range numerical vector length 2. range of values to highlight.
 #' bars that fall outside of this range have their alpha reduced. default equal to xlim
 #' 
-#' @author W. S. Drysdale
+#' @author W. S. Drysdale and J. Davison
 #' 
 #' @export
 #' 
@@ -34,33 +34,9 @@ plot_month_bar = function(df,
                          combine_spc = F,
                          highlight_range = xlim){
 
-  month_number = function(yd){
-    month_dat = data.frame(
-      length = c(31,28,31,30,31,30,31,31,30,31,30,31),
-      m = 1:12
-    ) %>% 
-      tibble() %>% 
-      mutate(end = cumsum(length),
-             start = c(1,(end[1:(length(end)-1)]+1)),
-             yd = map2(start,end,~.x:.y))
-
-    dayDat = data.frame(yd = yd) %>% 
-      mutate(m = case_when(yd %in%  month_dat$yd[[1]] ~ 1,
-                           yd %in%  month_dat$yd[[2]] ~ 2,
-                           yd %in%  month_dat$yd[[3]] ~ 3,
-                           yd %in%  month_dat$yd[[4]] ~ 4,
-                           yd %in%  month_dat$yd[[5]] ~ 5,
-                           yd %in%  month_dat$yd[[6]] ~ 6,
-                           yd %in%  month_dat$yd[[7]] ~ 7,
-                           yd %in%  month_dat$yd[[8]] ~ 8,
-                           yd %in%  month_dat$yd[[9]] ~ 9,
-                           yd %in%  month_dat$yd[[10]] ~ 10,
-                           yd %in%  month_dat$yd[[11]] ~ 11,
-                           yd %in%  month_dat$yd[[12]] ~ 12,
-                           ))
-    
-    dayDat$m
-    
+  month_number <- function(doy = 1) {
+    as.Date(doy, origin = "2015-12-31") %>%
+      lubridate::month()
   }
   
   if(!"code" %in% names(df))

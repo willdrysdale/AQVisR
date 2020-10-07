@@ -46,5 +46,5 @@ bars that fall outside of this range have their alpha reduced. default equal to 
 Plots the output of \code{parse_year_comp()} as a bar chart of the difference of two periods
 }
 \author{
-W. S. Drysdale
+W. S. Drysdale and J. Davison
 }
