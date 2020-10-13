@@ -33,6 +33,9 @@ parse_year_comp = function(df,
                                                by_code = F))) %>% 
       tidyr::unnest(data)
     
+    if(length(unique(df$y)) > 2)
+      warning(paste0("Greater than 2 options for y grouping: ",paste0(unique(df$y), collapse = ", ")))
+    
     return(df)
   }
   
