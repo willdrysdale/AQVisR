@@ -24,63 +24,65 @@
 #' 
 
 plot_month_bar = function(df,
-                         current = "2020",
-                         previous = "2015 - 2019",
-                         by_code = T,
-                         vline_pos = NULL,
-                         xlim = c(0,12),
-                         na.rm = F,
-                         type = c("difference","percent","absolute")[1],
-                         combine_spc = F,
-                         highlight_range = xlim){
-
+                          current = "2020",
+                          previous = "2015 - 2019",
+                          by_code = T,
+                          vline_pos = NULL,
+                          xlim = c(0,12),
+                          na.rm = F,
+                          type = c("difference","percent","absolute")[1],
+                          combine_spc = F,
+                          highlight_range = xlim,
+                          show_err = T){
+  
   month_number <- function(doy = 1) {
     as.Date(doy, origin = "2016-12-31") %>%
       lubridate::month()
+  }
+  
+  boot_median = function(val){
+    broom::tidy(boot::boot(val,statistic = function(x,i) median(x[i],na.rm = T),R = 1000)) %>% 
+      dplyr::rename(value = statistic,
+                    std_err = std.error)
+  }
+  
+  quadrature = function(x){
+    sqrt(sum(x^2,na.rm = T))
   }
   
   if(!"code" %in% names(df))
     by_code = F
   
   if(by_code){
-    df_month = df %>% 
-      filter(between(yd,0,364)) %>% 
-      mutate(yd = yd+1) %>% 
-      mutate(m = month_number(yd)) %>% 
-      dplyr::select(y,m,name,value,code) %>% 
-      group_by(y,m,name,code) %>% 
-      summarise_all(median,na.rm = T) %>% 
-      ungroup() %>% 
-      dplyr::group_nest(y)
-    
-    df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
-                             df_month$data[df_month$y %in% previous][[1]],
-                             by = c("m","name","code"), suffix = c(".current",".previous")) %>% 
-      mutate(value = value.current - value.previous,
-             value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
-      parse_spec()
+    joiners = c("m","name","code")
   }else{
-    df_month = df %>% 
-      filter(yd >= 0,
-             yd != 366) %>% 
-      mutate(m = month_number(yd)) %>% 
-      dplyr::select(y,m,name,value) %>% 
-      group_by(y,m,name) %>% 
-      summarise_all(median,na.rm = T) %>% 
-      ungroup() %>% 
-      dplyr::group_nest(y)
-    
-    df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
-                              df_month$data[df_month$y %in% previous][[1]],
-                             by = c("m","name"), suffix = c(".current",".previous")) %>% 
-      mutate(value = value.current - value.previous,
-             value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
-      parse_spec()
-    
+    joiners = c("m","name")
   }
   
-  df_month_diff = df_month_diff %>% 
-    mutate(highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F))
+  
+  df_month = df %>% 
+    filter(between(yd,0,364)) %>% 
+    mutate(yd = yd+1) %>% 
+    mutate(m = month_number(yd)) %>% 
+    dplyr::select(y,m,name,value,code) %>% 
+    group_by(y,m,name,code) %>% 
+    summarise(boot = list(boot_median(value))) %>% 
+    unnest(boot) %>% 
+    ungroup() %>% 
+    dplyr::group_nest(y)
+  
+  df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
+                            df_month$data[df_month$y %in% previous][[1]],
+                            by = joiners, suffix = c(".current",".previous")) %>% 
+    mutate(value = value.current - value.previous,
+           value_percent = ((value.current-value.previous)/value.previous)*100,
+           std_err = map2_dbl(std_err.previous,std_err.current,~quadrature(c(.x,.y))),
+           std_err_percent = sqrt((std_err.previous/value.previous)^2+
+                                    (std_err.previous/value.previous)^2+
+                                    (std_err.current/value.current)^2)*100,
+           highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) %>% 
+    parse_spec()
+  
   
   if(sum(highlight_range == xlim) == 2){
     a = c(1,1)
@@ -93,14 +95,20 @@ plot_month_bar = function(df,
       filter(!is.na(value))
   }
   
-  if(type == "difference")
+  if(type == "difference"){
     df_month_diff$plot_value = df_month_diff$value
+    df_month_diff$plot_err = df_month_diff$std_err
+  }
   
-  if(type == "percent")
+  if(type == "percent"){
     df_month_diff$plot_value = df_month_diff$value_percent
+    df_month_diff$plot_err = df_month_diff$std_err_percent
+  }
   
-  if(type == "absolute")
+  if(type == "absolute"){
     df_month_diff$plot_value = df_month_diff$value.current
+    df_month_diff$plot_err = df_month_diff$std_err.current
+  }
   
   g = df_month_diff %>% 
     ggplot()+
@@ -112,6 +120,13 @@ plot_month_bar = function(df,
                    type == "percent" ~ "Perecentage Concentration Difference",
                    type == "absolute" ~ "Absolute Concentration"))+
     AQvis_plotTheme()
+  
+  if(show_err & !combine_spc){
+    g = g+geom_errorbar(aes(x = m,
+                            ymin = plot_value-plot_err,
+                            ymax = plot_value+plot_err,
+                            group = name))
+  }
   
   if(combine_spc){
     if(by_code){
@@ -134,6 +149,8 @@ plot_month_bar = function(df,
     g = g+
       geom_vline(data = vline_dat, aes(xintercept = xint), colour = "grey50", linetype = 2)
   }
+  
+  
   #
   g
   
