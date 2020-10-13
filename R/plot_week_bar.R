@@ -47,8 +47,8 @@ plot_week_bar = function(df,
       ungroup() %>% 
       dplyr::group_nest(y)
     
-    df_week_diff = left_join(df_week$data[df_week$y == current][[1]],
-                             df_week$data[df_week$y == previous][[1]],
+    df_week_diff = left_join(df_week$data[df_week$y %in% current][[1]],
+                             df_week$data[df_week$y %in% previous][[1]],
                              by = c("w","name","code"), suffix = c(".current",".previous")) %>% 
       mutate(value = value.current - value.previous,
              value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
@@ -63,8 +63,8 @@ plot_week_bar = function(df,
       ungroup() %>% 
       dplyr::group_nest(y)
     
-    df_week_diff = left_join(df_week$data[df_week$y == current][[1]],
-                             df_week$data[df_week$y == previous][[1]],
+    df_week_diff = left_join(df_week$data[df_week$y %in% current][[1]],
+                             df_week$data[df_week$y %in% previous][[1]],
                              by = c("w","name"), suffix = c(".current",".previous")) %>% 
       mutate(value = value.current - value.previous,
              value_percent = ((value.current-value.previous)/value.previous)*100) %>% 

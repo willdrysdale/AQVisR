@@ -53,8 +53,8 @@ plot_month_bar = function(df,
       ungroup() %>% 
       dplyr::group_nest(y)
     
-    df_month_diff = left_join(df_month$data[df_month$y == current][[1]],
-                             df_month$data[df_month$y == previous][[1]],
+    df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
+                             df_month$data[df_month$y %in% previous][[1]],
                              by = c("m","name","code"), suffix = c(".current",".previous")) %>% 
       mutate(value = value.current - value.previous,
              value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
@@ -70,8 +70,8 @@ plot_month_bar = function(df,
       ungroup() %>% 
       dplyr::group_nest(y)
     
-    df_month_diff = left_join(df_month$data[df_month$y == current][[1]],
-                              df_month$data[df_month$y == previous][[1]],
+    df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
+                              df_month$data[df_month$y %in% previous][[1]],
                              by = c("m","name"), suffix = c(".current",".previous")) %>% 
       mutate(value = value.current - value.previous,
              value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
