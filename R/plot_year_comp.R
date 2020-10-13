@@ -39,9 +39,11 @@ plot_year_comp = function(df,
               size = 0.8,alpha = 0.2)+
     ylab("")+
     scale_x_continuous(expand = c(0,0),name = xlab)+
-    scale_colour_manual(values = RColorBrewer::brewer.pal(6,name = "Paired")[c(4,2)],name = "")+
     coord_cartesian(xlim=xlim)+
     AQvis_plotTheme()
+  
+  if(length(unique(df$y)) == 2)
+    g = g+scale_colour_manual(values = RColorBrewer::brewer.pal(6,name = "Paired")[c(4,2)],name = "")
   
   
   if(!"code" %in% names(df)){
