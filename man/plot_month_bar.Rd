@@ -4,18 +4,10 @@
 \alias{plot_month_bar}
 \title{Plot month bar}
 \usage{
-plot_month_bar(
-  df,
-  current = "2020",
-  previous = "2015 - 2019",
-  by_code = T,
-  vline_pos = NULL,
-  xlim = c(0, 12),
-  na.rm = F,
-  type = c("difference", "percent", "absolute")[1],
-  combine_spc = F,
-  highlight_range = xlim
-)
+plot_month_bar(df, current = "2020", previous = "2015 - 2019",
+  by_code = T, vline_pos = NULL, xlim = c(0, 12), na.rm = F,
+  type = c("difference", "percent", "absolute")[1], combine_spc = F,
+  highlight_range = xlim, show_err = T)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}
@@ -41,6 +33,8 @@ plot_month_bar(
 
 \item{highlight_range}{numerical vector length 2. range of values to highlight.
 bars that fall outside of this range have their alpha reduced. default equal to xlim}
+
+\item{show_err}{logical, show the standard error in the average on each bar. currently  only avaliable when combine_spc = F}
 }
 \description{
 Plots the output of \code{parse_year_comp()} as a bar chart of the difference of two periods

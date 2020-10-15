@@ -17,6 +17,7 @@
 #' @param combine_spc logical, should species be used in facet wrapping
 #' @param highlight_range numerical vector length 2. range of values to highlight.
 #' bars that fall outside of this range have their alpha reduced. default equal to xlim
+#' @param show_err logical, show the standard error in the average on each bar. currently  only avaliable when combine_spc = F
 #' 
 #' @author W. S. Drysdale and J. Davison
 #' 
@@ -54,35 +55,53 @@ plot_month_bar = function(df,
     by_code = F
   
   if(by_code){
-    joiners = c("m","name","code")
+    df_month = df %>% 
+      filter(between(yd,0,364)) %>% 
+      mutate(yd = yd+1) %>% 
+      mutate(m = month_number(yd)) %>% 
+      dplyr::select(y,m,name,value,code) %>% 
+      group_by(y,m,name,code) %>% 
+      summarise(boot = list(boot_median(value))) %>% 
+      unnest(boot) %>% 
+      ungroup() %>% 
+      dplyr::group_nest(y)
+    
+    df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
+                              df_month$data[df_month$y %in% previous][[1]],
+                              by = c("m","name","code"), suffix = c(".current",".previous")) %>% 
+      mutate(value = value.current - value.previous,
+             value_percent = ((value.current-value.previous)/value.previous)*100,
+             std_err = map2_dbl(std_err.previous,std_err.current,~quadrature(c(.x,.y))),
+             std_err_percent = sqrt((std_err.previous/value.previous)^2+
+                                      (std_err.previous/value.previous)^2+
+                                      (std_err.current/value.current)^2)*100,
+             highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) %>% 
+      parse_spec()
+
   }else{
-    joiners = c("m","name")
+    df_month = df %>% 
+      filter(between(yd,0,364)) %>% 
+      mutate(yd = yd+1) %>% 
+      mutate(m = month_number(yd)) %>% 
+      dplyr::select(y,m,name,value) %>% 
+      group_by(y,m,name) %>% 
+      summarise(boot = list(boot_median(value))) %>% 
+      unnest(boot) %>% 
+      ungroup() %>% 
+      dplyr::group_nest(y)
+    
+    df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
+                              df_month$data[df_month$y %in% previous][[1]],
+                              by = c("m","name"), suffix = c(".current",".previous")) %>% 
+      mutate(value = value.current - value.previous,
+             value_percent = ((value.current-value.previous)/value.previous)*100,
+             std_err = map2_dbl(std_err.previous,std_err.current,~quadrature(c(.x,.y))),
+             std_err_percent = sqrt((std_err.previous/value.previous)^2+
+                                      (std_err.previous/value.previous)^2+
+                                      (std_err.current/value.current)^2)*100,
+             highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) %>% 
+      parse_spec()
   }
-  
-  
-  df_month = df %>% 
-    filter(between(yd,0,364)) %>% 
-    mutate(yd = yd+1) %>% 
-    mutate(m = month_number(yd)) %>% 
-    dplyr::select(y,m,name,value,code) %>% 
-    group_by(y,m,name,code) %>% 
-    summarise(boot = list(boot_median(value))) %>% 
-    unnest(boot) %>% 
-    ungroup() %>% 
-    dplyr::group_nest(y)
-  
-  df_month_diff = left_join(df_month$data[df_month$y %in% current][[1]],
-                            df_month$data[df_month$y %in% previous][[1]],
-                            by = joiners, suffix = c(".current",".previous")) %>% 
-    mutate(value = value.current - value.previous,
-           value_percent = ((value.current-value.previous)/value.previous)*100,
-           std_err = map2_dbl(std_err.previous,std_err.current,~quadrature(c(.x,.y))),
-           std_err_percent = sqrt((std_err.previous/value.previous)^2+
-                                    (std_err.previous/value.previous)^2+
-                                    (std_err.current/value.current)^2)*100,
-           highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) %>% 
-    parse_spec()
-  
   
   if(sum(highlight_range == xlim) == 2){
     a = c(1,1)
