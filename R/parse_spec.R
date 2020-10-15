@@ -33,6 +33,7 @@ parse_spec = function(df,name = name,unit = TRUE,TeX = TRUE){
                                               !!name == "co" ~ paste0(latex2exp::TeX("CO / mg m^{-3}")),
                                               !!name == "ws" ~ paste0(latex2exp::TeX("Wind Speed / m s^{-1}")),
                                               !!name == "wd" ~ paste0(latex2exp::TeX("Wind Direction / \u00B0")),
+                                              !!name == "ox" ~ paste0(latex2exp::TeX("O_{x} / $\\mu$g m^{-3}")),
                                               TRUE ~ !!name))
     }else{
       df %>% 
@@ -46,6 +47,7 @@ parse_spec = function(df,name = name,unit = TRUE,TeX = TRUE){
                                               !!name == "co" ~ paste0(latex2exp::TeX("CO")),
                                               !!name == "ws" ~ paste0(latex2exp::TeX("Wind Speed")),
                                               !!name == "wd" ~ paste0(latex2exp::TeX("Wind Direction")),
+                                              !!name == "ox" ~ paste0(latex2exp::TeX("O_{x}")),
                                               TRUE ~ !!name))
     }
   }else{
@@ -61,6 +63,7 @@ parse_spec = function(df,name = name,unit = TRUE,TeX = TRUE){
                                               !!name == "co" ~ "CO / mg m^{-3}",
                                               !!name == "ws" ~ "Wind Speed / m s^{-1}",
                                               !!name == "ws" ~ "Wind Direction / \u00B0",
+                                              !!name == "ox" ~ "O_{x} / $\\mu$g m^{-3}",
                                               TRUE ~ !!name))
     }else{
       df %>% 
@@ -74,6 +77,7 @@ parse_spec = function(df,name = name,unit = TRUE,TeX = TRUE){
                                               !!name == "co" ~ "CO",
                                               !!name == "ws" ~ "Wind Speed",
                                               !!name == "ws" ~ "Wind Direction",
+                                              !!name == "ox" ~ "O_{x}",
                                               TRUE ~ !!name))
     }
   }
