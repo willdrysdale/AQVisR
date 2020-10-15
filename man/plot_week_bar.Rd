@@ -4,18 +4,10 @@
 \alias{plot_week_bar}
 \title{Plot week bar}
 \usage{
-plot_week_bar(
-  df,
-  current = "2020",
-  previous = "2015 - 2019",
-  by_code = T,
-  vline_pos = NULL,
-  xlim = c(0, 52),
-  na.rm = F,
-  type = c("difference", "percent", "absolute")[1],
-  combine_spc = F,
-  highlight_range = xlim
-)
+plot_week_bar(df, current = "2020", previous = "2015 - 2019",
+  by_code = T, vline_pos = NULL, xlim = c(0, 52), na.rm = F,
+  type = c("difference", "percent", "absolute")[1], combine_spc = F,
+  highlight_range = xlim)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}

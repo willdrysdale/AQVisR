@@ -4,13 +4,9 @@
 \alias{create_exceedance_plotList}
 \title{create_exceedance_plotList}
 \usage{
-create_exceedance_plotList(
-  count_df,
-  spc = c("no2_1_200", "pm10_24_50", "pm25_24_25"),
-  max_sites = 9,
-  year_range = 2019:2020,
-  top_year = 2019
-)
+create_exceedance_plotList(count_df, spc = c("no2_1_200", "pm10_24_50",
+  "pm25_24_25"), max_sites = 9, year_range = 2019:2020,
+  top_year = 2019)
 }
 \arguments{
 \item{count_df}{output of \code{count_exceedance()}}
