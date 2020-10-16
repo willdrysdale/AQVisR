@@ -4,10 +4,16 @@
 \alias{count_exceedance}
 \title{count_exceedance}
 \usage{
-count_exceedance(df, thresh, period = 1,
-  exceedance_days_only = "o3_8_100", summary = c("none", "total",
-  "average")[1], summary_name = NULL, total = FALSE,
-  total_name = NULL)
+count_exceedance(
+  df,
+  thresh,
+  period = 1,
+  exceedance_days_only = "o3_8_100",
+  summary = c("none", "total", "average")[1],
+  summary_name = NULL,
+  total = FALSE,
+  total_name = NULL
+)
 }
 \arguments{
 \item{df}{output of \code{parse_exceedance()}}

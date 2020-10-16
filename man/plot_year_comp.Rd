@@ -4,9 +4,17 @@
 \alias{plot_year_comp}
 \title{plot_year_comp}
 \usage{
-plot_year_comp(df, type = c("median", "smooth", "smoothmedian")[1],
-  xlim = c(0, 365), vline_pos = NULL, xlab = "Day of Year",
-  strip_text_y = NULL, annotations = TRUE, ...)
+plot_year_comp(
+  df,
+  type = c("median", "smooth", "smoothmedian")[1],
+  xlim = c(0, 365),
+  vline_pos = NULL,
+  xlab = "Day of Year",
+  strip_text_y = NULL,
+  annotations = TRUE,
+  alpha = 0.2,
+  ...
+)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}
@@ -27,6 +35,8 @@ plot_year_comp(df, type = c("median", "smooth", "smoothmedian")[1],
 \item{strip_text_y}{override the strip text on the y axis}
 
 \item{annotations}{logical, show plot subtitles? default true}
+
+\item{alpha}{control the alpha of the underlying timeseries}
 
 \item{...}{}
 }

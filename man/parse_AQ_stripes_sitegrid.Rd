@@ -4,8 +4,7 @@
 \alias{parse_AQ_stripes_sitegrid}
 \title{parse_AQ_stripes_sitegrid}
 \usage{
-parse_AQ_stripes_sitegrid(siteList, type = c("conc", "diff")[1],
-  year = 2020)
+parse_AQ_stripes_sitegrid(siteList, type = c("conc", "diff")[1], year = 2020)
 }
 \arguments{
 \item{siteList}{list of individual site data}

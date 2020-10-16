@@ -4,10 +4,19 @@
 \alias{plot_month_bar}
 \title{Plot month bar}
 \usage{
-plot_month_bar(df, current = "2020", previous = "2015 - 2019",
-  by_code = T, vline_pos = NULL, xlim = c(0, 12), na.rm = F,
-  type = c("difference", "percent", "absolute")[1], combine_spc = F,
-  highlight_range = xlim, show_err = T)
+plot_month_bar(
+  df,
+  current = "2020",
+  previous = "2015 - 2019",
+  by_code = T,
+  vline_pos = NULL,
+  xlim = c(0, 12),
+  na.rm = F,
+  type = c("difference", "percent", "absolute")[1],
+  combine_spc = F,
+  highlight_range = xlim,
+  show_err = T
+)
 }
 \arguments{
 \item{df}{output of \code{parse_year_comp()}}

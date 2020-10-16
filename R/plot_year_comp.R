@@ -14,6 +14,7 @@
 #' @param xlab x axis label
 #' @param strip_text_y override the strip text on the y axis
 #' @param annotations logical, show plot subtitles? default true
+#' @param alpha control the alpha of the underlying timeseries
 #' @param ... 
 #' 
 #' @author W. S. Drysdale
@@ -28,6 +29,7 @@ plot_year_comp = function(df,
                           xlab = "Day of Year",
                           strip_text_y = NULL,
                           annotations = TRUE,
+                          alpha = 0.2,
                           ...){
   
   if(!"name_parsed" %in% names(df))
@@ -36,7 +38,7 @@ plot_year_comp = function(df,
   g = ggplot(df)+
     geom_line(aes(yd,value,
                   group = y, colour = y),
-              size = 0.8,alpha = 0.2)+
+              size = 0.8,alpha = alpha)+
     ylab("")+
     scale_x_continuous(expand = c(0,0),name = xlab)+
     coord_cartesian(xlim=xlim)+
