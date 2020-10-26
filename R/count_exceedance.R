@@ -47,7 +47,7 @@ count_exceedance = function(df,
       # codes per year
       
       codes_per_year = df %>% 
-        mutate(y = year(date)) %>% 
+        mutate(y = lubridate::year(date)) %>% 
         select(y,code) %>% 
         distinct() %>% 
         group_by(y) %>% 
@@ -68,8 +68,8 @@ count_exceedance = function(df,
   }
   
   dfCountRegular = df %>% 
-    mutate(y = year(date),
-           m = month(date)) %>% 
+    mutate(y = lubridate::year(date),
+           m = lubridate::month(date)) %>% 
     filter(!is.na(exceed),
            period_h %in% period,
            !name %in% exceedance_days_only,
@@ -81,8 +81,8 @@ count_exceedance = function(df,
   if("o3_8_100" %in% unique(df$name)){
     
     dfCountDaysOnly = df %>% 
-      mutate(y = year(date),
-             m = month(date),
+      mutate(y = lubridate::year(date),
+             m = lubridate::month(date),
              date = lubridate::date(date)) %>% 
       filter(!is.na(exceed),
              period_h %in% period,

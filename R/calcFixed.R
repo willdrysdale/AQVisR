@@ -23,14 +23,14 @@ calcFixed = function(df,thresh){
     
     temp_df = df
     
-    temp_df$hour = hour(temp_df$date)
+    temp_df$hour = lubridate::hour(temp_df$date)
     
     group_lookup = hour_grouping(thresh$period_h[i])
     
     temp_df = temp_df %>% 
       left_join(group_lookup, "hour")
     
-    hour(temp_df$date) = temp_df$group
+    lubridate::hour(temp_df$date) = temp_df$group
     
     parsedList[[i]] = temp_df %>% 
       dplyr::select(-hour, -group) %>% 

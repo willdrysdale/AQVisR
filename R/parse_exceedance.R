@@ -16,28 +16,22 @@ parse_exceedance = function(dat,thresh,rolling_spc = "o3"){
     select(date,name,code,value) %>% 
     filter(name %in% thresh$name) %>% 
     group_by(code) %>% 
-    split(.$name)
+    split(.$name) %>% 
+    purrr::keep(~nrow(.x) > 1)
   
   threshList = thresh %>% 
     filter(name %in% dat$name) %>% 
-    split(.$name)
+    split(.$name) %>% 
+    purrr::keep(~nrow(.x) >= 1)
   
   
-  if(requireNamespace("furrr", quietly = TRUE)){
-    df_parsed = furrr::future_map2_dfr(datList,threshList,
-                                       ~calcAverage(df = .x,thresh = .y,rolling_spc = rolling_spc)) %>% 
-      left_join(thresh[,c("period_h","threshold_ugm3","id")],c("name" = "id")) %>% 
-      mutate(exceed = ifelse(value > threshold_ugm3,T,F))
-    
-  }else{
-    warning("The performance of parse_exceedance can be improved by installing the package 'furrr'. Currently using 'purrr' instead")
-    df_parsed = purrr::map2_df(datList,threshList,
-                                       ~calcAverage(df = .x,thresh = .y,rolling_spc = rolling_spc)) %>% 
-      left_join(thresh[,c("period_h","threshold_ugm3","id")],c("name" = "id")) %>% 
-      mutate(exceed = ifelse(value > threshold_ugm3,T,F))
-  }
+  df_parsed = purrr::map2_df(datList,threshList,
+                             ~calcAverage(df = .x,thresh = .y,rolling_spc = rolling_spc)) %>% 
+    left_join(thresh[,c("period_h","threshold_ugm3","id")],c("name" = "id")) %>% 
+    mutate(exceed = ifelse(value > threshold_ugm3,T,F))
   
-
+  
+  
   # return
   df_parsed
 }
