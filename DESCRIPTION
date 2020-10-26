@@ -7,11 +7,12 @@ Author: Will S Drysdale
 Maintainer: Will S Drysdale <willdrysdale@googlemail.com>
 URL: https://github.com/willdrysdale/AQVisR
 Encoding: UTF-8
+Depends:
+	ggplot2
 Imports:
     openair,
     dplyr,
     lubridate,
-    ggplot2,
     tidyr,
     purrr,
     latex2exp,
