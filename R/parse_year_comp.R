@@ -40,31 +40,47 @@ parse_year_comp = function(df,
   }
   
   df = df %>% 
-    filter(lubridate::year(date) <= comp_year) # remove data following comp_year to simplify averaging
+    filter(lubridate::year(date) <= max(comp_year))  # remove data following comp_year to simplify averaging
   
+  ref_year = unique(year(df$date))
+  ref_year = ref_year[!ref_year %in% comp_year]
+  
+  if(length(ref_year) == 0)
+    stop("No data outside of comp_year supplied")
+  
+  # Removed 2020/01/13 to allow for multiple comp years
   # Include data from previous year at the begining of the time series to allow rolling median to run into the begining of the comparison year
-  df_pre = df %>% 
-    dplyr::filter(name %in% species,
-                  lubridate::year(date) == comp_year-1,
-                  lubridate::month(date) %in% 6:12) %>% 
-    dplyr::mutate(y = lubridate::year(date),
-                  yd = (lubridate::yday(date)-365),
-                  y = as.character(comp_year)) %>% 
-    dplyr::select(y,yd,name,value) %>% 
-    dplyr::group_by(y,yd,name) %>% 
-    dplyr::summarise_all(median,na.rm = T) %>% 
-    dplyr::group_by(name,y) %>% 
-    dplyr::mutate(value_median = zoo::rollmedian(value,k = rolling_width,fill = NA)) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::mutate(rolling_width = rolling_width)
+  # df_pre = df %>% 
+  #   dplyr::filter(name %in% species,
+  #                 lubridate::year(date) == comp_year-1,
+  #                 lubridate::month(date) %in% 6:12) %>% 
+  #   dplyr::mutate(y = lubridate::year(date),
+  #                 yd = (lubridate::yday(date)-365),
+  #                 y = as.character(comp_year)) %>% 
+  #   dplyr::select(y,yd,name,value) %>% 
+  #   dplyr::group_by(y,yd,name) %>% 
+  #   dplyr::summarise_all(median,na.rm = T) %>% 
+  #   dplyr::group_by(name,y) %>% 
+  #   dplyr::mutate(value_median = zoo::rollmedian(value,k = rolling_width,fill = NA)) %>% 
+  #   dplyr::ungroup() %>% 
+  #   dplyr::mutate(rolling_width = rolling_width)
+  
+  ref_label = NULL
+  if(length(ref_year) == 1){
+    ref_label = as.character(ref_year)
+  }else{
+    if(sum(diff(ref_year)) == (length(ref_year)-1)){
+      ref_label = paste0(min(ref_year,na.rm = T)," - ",max(ref_year,na.rm = T))
+    }else{
+      ref_label = paste0(ref_year,collapse = ", ")
+    }
+  }
   
   df = df %>% 
     dplyr::filter(name %in% species) %>% 
     dplyr::mutate(y = lubridate::year(date),
-                  yd = lubridate::yday(date),
-                  y = dplyr::case_when(y == comp_year ~ as.character(comp_year),
-                                min(y,na.rm = T) == (max(y,na.rm = T)-1) ~ as.character(min(y,na.rm = T)),
-                                TRUE ~ paste0(min(y,na.rm = T)," - ",(max(y,na.rm = T)-1)))) %>% 
+                  yd = lubridate::yday(date)) %>% 
+    mutate(y = ifelse(y %in% comp_year, as.character(y), ref_label)) %>% 
     dplyr::select(y,yd,name,value) %>% 
     dplyr::group_by(y,yd,name) %>% 
     dplyr::summarise_all(median,na.rm = T) %>% 
@@ -72,7 +88,7 @@ parse_year_comp = function(df,
     dplyr::mutate(value_median = zoo::rollmedian(value,k = rolling_width,fill = NA)) %>% 
     dplyr::ungroup() %>% 
     dplyr::mutate(rolling_width = rolling_width) %>% 
-    rbind(df_pre) %>% 
+    # rbind(df_pre) %>% 
     arrange(yd)
   
   

@@ -9,13 +9,14 @@
 #'              \item diff - calcualte the difference between the daily median of teh frist n-1 years supplied vs the nth year
 #'              }
 #' @param preserve_code Logical. Restore the code column to the output
+#' @param ref integer vector of years for use as the reference data for diff plots. Default 2015:2019
 #' 
 #' @author W. S. Drysdale
 #' 
 #' @export
 #' 
 
-parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
+parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F,ref = 2015:2019){
   
   if(preserve_code){
     if("code" %in% names(df)){
@@ -51,7 +52,7 @@ parse_AQ_stripes = function(df,type = c("conc","diff")[1], preserve_code = F){
   }
   
   df_ref = df %>% 
-    filter(year(date) %in% year(min(date,na.rm = T)):(year(max(date,na.rm = T))-1)) %>% 
+    filter(year(date) %in% ref) %>% 
     mutate(yday = yday(date)) %>% 
     dplyr::select(yday,name,value) %>% 
     group_by(yday,name) %>% 
