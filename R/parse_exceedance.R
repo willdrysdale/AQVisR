@@ -13,22 +13,22 @@
 parse_exceedance = function(dat,thresh,rolling_spc = "o3"){
   
   datList = dat %>% 
-    select(date,name,code,value) %>% 
-    filter(name %in% thresh$name) %>% 
-    group_by(code) %>% 
+    dplyr::select(date,name,code,value) %>% 
+    dplyr::filter(name %in% thresh$name) %>% 
+    dplyr::group_by(code) %>% 
     split(.$name) %>% 
     purrr::keep(~nrow(.x) > 1)
   
   threshList = thresh %>% 
-    filter(name %in% dat$name) %>% 
+    dplyr::filter(name %in% dat$name) %>% 
     split(.$name) %>% 
     purrr::keep(~nrow(.x) >= 1)
   
   
   df_parsed = purrr::map2_df(datList,threshList,
                              ~calcAverage(df = .x,thresh = .y,rolling_spc = rolling_spc)) %>% 
-    left_join(thresh[,c("period_h","threshold_ugm3","id")],c("name" = "id")) %>% 
-    mutate(exceed = ifelse(value > threshold_ugm3,T,F))
+    dplyr::left_join(thresh[,c("period_h","threshold_ugm3","id")],c("name" = "id")) %>% 
+    dplyr::mutate(exceed = ifelse(value > threshold_ugm3,T,F))
   
   
   
