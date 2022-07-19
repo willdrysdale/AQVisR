@@ -75,9 +75,11 @@ plot_month_bar = function(df,
              std_err_percent = sqrt((std_err.previous/value.previous)^2+
                                       (std_err.previous/value.previous)^2+
                                       (std_err.current/value.current)^2)*100,
-             highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) %>% 
-      parse_spec()
-
+             highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F))
+    
+    if(!"name_parsed" %in% names(df_month_diff))
+      df_month_diff = parse_spec(df_month_diff)
+    
   }else{
     df_month = df %>% 
       filter(between(yd,0,364)) %>% 
@@ -99,8 +101,11 @@ plot_month_bar = function(df,
              std_err_percent = sqrt((std_err.previous/value.previous)^2+
                                       (std_err.previous/value.previous)^2+
                                       (std_err.current/value.current)^2)*100,
-             highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) %>% 
-      parse_spec()
+             highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) 
+    
+    if(!"name_parsed" %in% names(df_month_diff))
+      df_month_diff = parse_spec(df_month_diff)
+    
   }
   
   if(sum(highlight_range == xlim) == 2){

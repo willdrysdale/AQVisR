@@ -51,8 +51,11 @@ plot_week_bar = function(df,
                              df_week$data[df_week$y %in% previous][[1]],
                              by = c("w","name","code"), suffix = c(".current",".previous")) %>% 
       mutate(value = value.current - value.previous,
-             value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
-      parse_spec()
+             value_percent = ((value.current-value.previous)/value.previous)*100)
+    
+    if(!"name_parsed" %in% names(df_week_diff))
+      df_week_diff = parse_spec(df_week_diff)
+    
   }else{
     df_week = df %>% 
       filter(yd >= 0) %>% 
@@ -67,8 +70,10 @@ plot_week_bar = function(df,
                              df_week$data[df_week$y %in% previous][[1]],
                              by = c("w","name"), suffix = c(".current",".previous")) %>% 
       mutate(value = value.current - value.previous,
-             value_percent = ((value.current-value.previous)/value.previous)*100) %>% 
-      parse_spec()
+             value_percent = ((value.current-value.previous)/value.previous)*100) 
+    
+    if(!"name_parsed" %in% names(df_week_diff))
+      df_week_diff = parse_spec(df_week_diff)
     
   }
   
