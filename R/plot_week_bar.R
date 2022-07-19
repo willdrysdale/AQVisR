@@ -32,7 +32,8 @@ plot_week_bar = function(df,
                          na.rm = F,
                          type = c("difference","percent","absolute")[1],
                          combine_spc = F,
-                         highlight_range = xlim){
+                         highlight_range = xlim,
+                         parse_names = T){
   
   if(!"code" %in% names(df))
     by_code = F
@@ -53,8 +54,12 @@ plot_week_bar = function(df,
       mutate(value = value.current - value.previous,
              value_percent = ((value.current-value.previous)/value.previous)*100)
     
-    if(!"name_parsed" %in% names(df_week_diff))
+    if(parse_names){
       df_week_diff = parse_spec(df_week_diff)
+    }else{
+      df_week_diff = df_week_diff %>% 
+        mutate(name_parsed = name)
+    }
     
   }else{
     df_week = df %>% 
@@ -72,8 +77,12 @@ plot_week_bar = function(df,
       mutate(value = value.current - value.previous,
              value_percent = ((value.current-value.previous)/value.previous)*100) 
     
-    if(!"name_parsed" %in% names(df_week_diff))
+    if(parse_names){
       df_week_diff = parse_spec(df_week_diff)
+    }else{
+      df_week_diff = df_week_diff %>% 
+        mutate(name_parsed = name)
+    }
     
   }
   

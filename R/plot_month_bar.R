@@ -34,7 +34,8 @@ plot_month_bar = function(df,
                           type = c("difference","percent","absolute")[1],
                           combine_spc = F,
                           highlight_range = xlim,
-                          show_err = T){
+                          show_err = T,
+                          parse_names = T){
   
   month_number <- function(doy = 1) {
     as.Date(doy, origin = "2016-12-31") %>%
@@ -77,8 +78,12 @@ plot_month_bar = function(df,
                                       (std_err.current/value.current)^2)*100,
              highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F))
     
-    if(!"name_parsed" %in% names(df_month_diff))
+    if(parse_names){
       df_month_diff = parse_spec(df_month_diff)
+    }else{
+      df_month_diff = df_month_diff %>% 
+        mutate(name_parsed = name)
+    }
     
   }else{
     df_month = df %>% 
@@ -103,8 +108,12 @@ plot_month_bar = function(df,
                                       (std_err.current/value.current)^2)*100,
              highlight = ifelse(between(m,min(highlight_range),max(highlight_range)),T,F)) 
     
-    if(!"name_parsed" %in% names(df_month_diff))
+    if(parse_names){
       df_month_diff = parse_spec(df_month_diff)
+    }else{
+      df_month_diff = df_month_diff %>% 
+        mutate(name_parsed = name)
+    }
     
   }
   
